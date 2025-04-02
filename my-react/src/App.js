@@ -17,6 +17,16 @@ function App() {
     ])
 
     const [selectedSort, setSelectedSort] = useState('')
+    const [searchQuery, setSearcgQuery] = useState('')
+
+    function getSortedPosts() {
+        if(selectedSort){
+            return [...posts].sort((a , b) => a[selectedSort].localeCompare(b[selectedSort]))
+        }
+        return posts;
+    }
+
+    const sortedPosts = getSortedPosts()
 
     const createPost = (newPost) => {
         setPosts([...posts, newPost])
@@ -27,7 +37,7 @@ function App() {
     }
     const sortPosts = (sort) => {
         setSelectedSort(sort)
-        setPosts([...posts].sort((a , b) => a[sort].localeCompare(b[sort])))
+
 
     }
 
@@ -36,6 +46,11 @@ function App() {
         <PostForm create={createPost}/>
         <hr style={{margin:'15px 0'}}/>
         <div>
+            <Myinput
+                value={searchQuery}
+                onChange={e => setSearcgQuery(e.target.value)}
+            placeholder="Search..."
+            />
             <MySelect
                 value={selectedSort}
                 onChange={sortPosts}
@@ -48,7 +63,7 @@ function App() {
         </div>
         {posts.length
             ?
-            <Postlist remove={removePost} posts={posts} title={"1 Posts List"}/>
+            <Postlist remove={removePost} posts={sortedPosts} title={"1 Posts List"}/>
             :
             <h1 style={{textAlign:'center'}}>
                 Posts were not found
